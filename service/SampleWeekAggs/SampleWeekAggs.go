@@ -169,24 +169,24 @@ func (a *Aggs) searchTimeRange() error {
 	sub_aggs["week_virus_type_top"] = elastic.NewTermsAggregation().Field("hr_scan_virus_type").Size(3)
 	//Virus、Worm、Exploit 这三种主类型的报毒数量的"总和"
 	sub_aggs["high_risk_total"] = elastic.NewFilterAggregation().Filter(
-		elastic.NewBoolQuery().MustNot(elastic.NewTermsQuery("hr_scan_virus_type", "Virus", "Worm", "Exploit")),
+		elastic.NewBoolQuery().Must(elastic.NewTermsQuery("hr_scan_virus_type", "Virus", "Worm", "Exploit")),
 	)
 	//Ransom勒索病毒数量
 	sub_aggs["extortion_total"] = elastic.NewFilterAggregation().Filter(
-		elastic.NewBoolQuery().MustNot(elastic.NewTermQuery("hr_scan_virus_type", "Ransom")),
+		elastic.NewBoolQuery().Must(elastic.NewTermQuery("hr_scan_virus_type", "Ransom")),
 	)
 	//CoinMiner的报毒数量
 	sub_aggs["mining_total"] = elastic.NewFilterAggregation().Filter(
-		elastic.NewBoolQuery().MustNot(elastic.NewTermQuery("hr_scan_virus_name", "CoinMiner")),
+		elastic.NewBoolQuery().Must(elastic.NewTermQuery("hr_scan_virus_name", "CoinMiner")),
 	)
 	//报毒数量最多的前三个家族名称
 	sub_aggs["week_virus_name_top"] = elastic.NewTermsAggregation().Field("hr_scan_virus_name").Size(3)
 	//单独列出  Virus 、 Worm 本周数量
 	sub_aggs["week_virus_spread_top"] = elastic.NewFilterAggregation().Filter(
-		elastic.NewBoolQuery().MustNot(elastic.NewTermQuery("hr_scan_virus_type", "Virus")),
+		elastic.NewBoolQuery().Must(elastic.NewTermQuery("hr_scan_virus_type", "Virus")),
 	)
 	sub_aggs["week_worm_spread_top"] = elastic.NewFilterAggregation().Filter(
-		elastic.NewBoolQuery().MustNot(elastic.NewTermQuery("hr_scan_virus_type", "Worm")),
+		elastic.NewBoolQuery().Must(elastic.NewTermQuery("hr_scan_virus_type", "Worm")),
 	)
 
 	//本周新收集样本XX个，其中黑样本XX个
